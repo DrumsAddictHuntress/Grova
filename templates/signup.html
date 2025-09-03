@@ -1,0 +1,31 @@
+
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-5">
+    <div class="card shadow-lg">
+      <div class="card-body p-4">
+        <h2 class="mb-3 text-center">Sign up</h2>
+        <form method="POST">
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input type="password" name="password" class="form-control" required minlength="6">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Confirm Password</label>
+            <input type="password" name="confirm" class="form-control" required minlength="6">
+          </div>
+          <div class="d-grid gap-2">
+            <button class="btn btn-success" type="submit">Create account</button>
+            <a href="{{ url_for('login') }}" class="btn btn-outline-secondary">Back to login</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
