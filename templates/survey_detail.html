@@ -1,0 +1,163 @@
+
+{% extends "base.html" %}
+{% block content %}
+<h1>Survey #{{ survey.id }}</h1>
+
+<div class="card mb-4">
+  <div class="card-header">Identification</div>
+  <div class="card-body">
+    <p><strong>Room:</strong> {{ survey.room_number }}</p>
+    <p><strong>Batch:</strong> {{ survey.batch_number }}</p>
+    <p><strong>Filling Date:</strong> {{ survey.filling_date }}</p>
+    <p><strong>Created:</strong> {{ survey.created_at.strftime("%Y-%m-%d") if survey.created_at else "" }}</p>
+  </div>
+</div>
+
+<div class="card mb-4">
+  <div class="card-header">Compost (Setup)</div>
+  <div class="card-body">
+    <p><strong>Compost Amount:</strong> {{ survey.compost_amount }}</p>
+    <p><strong>Kg:</strong> {{ survey.compost_kg }}</p>
+    <p><strong>Missing Section:</strong> {{ survey.missing_section }}</p>
+    <p><strong>Total Room/m²:</strong> {{ survey.total_room_m2 }}</p>
+    <p><strong>Extra Compost:</strong> {{ survey.extra_compost }}</p>
+    <p><strong>Remarks:</strong> {{ survey.compost_remarks }}</p>
+    <p><strong>Arrival:</strong> {{ survey.compost_arrival }}</p>
+    <p><strong>Camion Temp:</strong> {{ survey.compost_camion_temp }}</p>
+  </div>
+</div>
+
+<div class="card mb-4">
+  <div class="card-header">Compost Physicals</div>
+  <div class="card-body">
+    <p><strong>Extra Water:</strong> {{ survey.extra_water }}</p>
+    <p><strong>Height:</strong> {{ survey.compost_height }}</p>
+    <p><strong>Moist (1–5):</strong> {{ survey.compost_moist }}</p>
+    <p><strong>Length (1–5):</strong> {{ survey.compost_length }}</p>
+    <p><strong>Texture (1–5):</strong> {{ survey.compost_texture }}</p>
+    <p><strong>Spawn (1–5):</strong> {{ survey.compost_spawn }}</p>
+  </div>
+</div>
+
+<div class="card mb-4">
+  <div class="card-header">Casing</div>
+  <div class="card-body">
+    <p><strong>RH (%):</strong> {{ survey.relative_humidity }}</p>
+    <p><strong>Water:</strong> {{ survey.casing_water }}</p>
+    <p><strong>BBK:</strong> {{ survey.casing_bbk }}</p>
+    <p><strong>Peat 55%:</strong> {{ survey.casing_peat_55 }}</p>
+    <p><strong>Peat 110%:</strong> {{ survey.casing_peat_110 }}</p>
+    <p><strong>Peat 135%:</strong> {{ survey.casing_peat_135 }}</p>
+    <p><strong>Sugar Beet Lime:</strong> {{ survey.casing_sugar_beet_lime }}</p>
+    <p><strong>Hydrated Lime:</strong> {{ survey.casing_hydrated_lime }}</p>
+    <p><strong>Limestone CaCho:</strong> {{ survey.casing_limestone_cacho }}</p>
+  </div>
+</div>
+
+<div class="card mb-4">
+  <div class="card-header">Tunnel & Shipping</div>
+  <div class="card-body">
+    <p><strong>Filled:</strong> {{ survey.filled }}</p>
+    <p><strong>Arrived:</strong> {{ survey.arrived }}</p>
+    <p><strong>In Tunnel:</strong> {{ survey.in_tunnel }}</p>
+    <p><strong>Tunnel Number:</strong> {{ survey.tunnel_number }}</p>
+    <p><strong>Shipping pH:</strong> {{ survey.shipping_ph }}</p>
+    <p><strong>Shipping Days:</strong> {{ survey.shipping_days }}</p>
+  </div>
+</div>
+
+<div class="card mb-4">
+  <div class="card-header">Spawning & Supplements</div>
+  <div class="card-body">
+    <p><strong>Spawn Type/Rate:</strong> {{ survey.spawn_type_rate }}</p>
+    <p><strong>Supplement:</strong> {{ survey.supplement }}</p>
+    <p><strong>Supplement Kg:</strong> {{ survey.supplement_kg }}</p>
+    <p><strong>Spawning N (%):</strong> {{ survey.spawning_n }}</p>
+    <p><strong>Spawning Ash (%):</strong> {{ survey.spawning_ash }}</p>
+    <p><strong>Spawning Wet Weight:</strong> {{ survey.spawning_wet_weight }}</p>
+    <p><strong>Spawning Cellulose:</strong> {{ survey.spawning_cellulose }}</p>
+  </div>
+</div>
+
+<div class="card mb-4">
+  <div class="card-header">Casing Measurements</div>
+  <div class="card-body">
+    <p><strong>Thickness:</strong> {{ survey.casing_thickness }}</p>
+    <p><strong>pH:</strong> {{ survey.casing_ph }}</p>
+    <p><strong>Humidity:</strong> {{ survey.casing_humidity }}</p>
+  </div>
+</div>
+
+<div class="card mb-4">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <span>Daily Stats</span>
+    <form method="post" action="{{ url_for('surveys.delete_survey', survey_id=survey.id) }}" onsubmit="return confirm('Delete this survey and all daily stats?');">
+      <button class="btn btn-danger btn-sm">Delete Survey</button>
+    </form>
+  </div>
+  <div class="card-body p-0">
+    <table class="table table-striped m-0">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Comp Ctrl</th>
+          <th>Comp Temp</th>
+          <th>Comp Max</th>
+          <th>Air Ctrl</th>
+          <th>Air Meas</th>
+          <th>CO₂</th>
+          <th>CO₂ Meas</th>
+          <th>RH Meas</th>
+          <th>Max</th>
+          <th>Ab.</th>
+          <th>Fresh Air</th>
+          <th>Fresh Air Meas</th>
+          <th>Fan</th>
+          <th>Fan Meas</th>
+          <th>Heat</th>
+          <th>Temp</th>
+          <th>Cool Temp</th>
+          <th>H₂O</th>
+          <th>Ref Temp</th>
+          <th>Remarks</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for d in dailies %}
+        <tr>
+          <td>{{ d.stat_date }}</td>
+          <td>{{ d.comp_ctrl }}</td>
+          <td>{{ d.comp_temp }}</td>
+          <td>{{ d.comp_max }}</td>
+          <td>{{ d.air_ctrl }}</td>
+          <td>{{ d.air_meas }}</td>
+          <td>{{ d.co2 }}</td>
+          <td>{{ d.co2_meas }}</td>
+          <td>{{ d.rh_meas }}</td>
+          <td>{{ d.max_val }}</td>
+          <td>{{ d.ab_val }}</td>
+          <td>{{ d.fresh_air }}</td>
+          <td>{{ d.fresh_air_meas }}</td>
+          <td>{{ d.fan }}</td>
+          <td>{{ d.fan_meas }}</td>
+          <td>{{ d.heat }}</td>
+          <td>{{ d.temp }}</td>
+          <td>{{ d.cool_temp }}</td>
+          <td>{{ d.h2o }}</td>
+          <td>{{ d.ref_temp }}</td>
+          <td>{{ d.remarks }}</td>
+          <td>
+            <form method="post" action="{{ url_for('surveys.delete_daily', survey_id=survey.id, daily_id=d.id) }}" onsubmit="return confirm('Delete this daily stat?');">
+              <button class="btn btn-sm btn-outline-danger">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="22" class="text-center text-muted">No daily stats yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

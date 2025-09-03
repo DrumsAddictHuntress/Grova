@@ -1,0 +1,115 @@
+
+{% extends "base.html" %}
+{% block content %}
+<h1>Create Static Form</h1>
+<form method="post" action="{{ url_for('surveys.create_survey') }}" class="row g-3">
+
+  <h4 class="mt-3">Identification</h4>
+  <div class="col-md-4"><label class="form-label">Room Number *</label><input name="room_number" class="form-control" required></div>
+  <div class="col-md-4"><label class="form-label">Batch Number *</label><input name="batch_number" class="form-control" required></div>
+  <div class="col-md-4"><label class="form-label">Filling Date *</label><input type="date" name="filling_date" class="form-control" required></div>
+
+  <h4 class="mt-3">Compost (Setup)</h4>
+  <div class="col-md-3"><label class="form-label">Compost Amount *</label><input type="number" step="0.01" name="compost_amount" class="form-control" required></div>
+  <div class="col-md-3"><label class="form-label">Kg *</label><input type="number" step="0.01" name="compost_kg" class="form-control" required></div>
+  <div class="col-md-3"><label class="form-label">Missing Section</label><input name="missing_section" class="form-control"></div>
+  <div class="col-md-3"><label class="form-label">Total Room/m²</label><input type="number" step="0.01" name="total_room_m2" class="form-control"></div>
+  <div class="col-md-3"><label class="form-label">Extra Compost</label><input type="number" step="0.01" name="extra_compost" class="form-control"></div>
+  <div class="col-12">
+    <label class="form-label">Compost Remarks *</label>
+    <small class="text-muted d-block mb-1">Very wet? Smelly? Leave empty if no comment.</small>
+    <textarea name="compost_remarks" class="form-control" required></textarea>
+  </div>
+  <div class="col-md-4"><label class="form-label">Compost Arrival *</label><input name="compost_arrival" class="form-control" placeholder="Time e.g. 9:00 AM" required></div>
+  <div class="col-md-4"><label class="form-label">Compost Camion Temperature *</label><input type="number" step="0.01" name="compost_camion_temp" class="form-control" required></div>
+
+  <h4 class="mt-3">Compost Physicals & Scales</h4>
+  <div class="col-md-3"><label class="form-label">Extra Water</label><input type="number" step="0.01" name="extra_water" class="form-control"></div>
+  <div class="col-md-3"><label class="form-label">Compost Height *</label><input type="number" step="0.01" name="compost_height" class="form-control" required></div>
+
+  {% macro scale(name,label) -%}
+    <div class="col-12">
+      <label class="form-label">{{ label }} (1–5) *</label>
+      <div class="d-flex gap-3">
+        {% for i in range(1,6) %}
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="{{ name }}" id="{{ name }}_{{ i }}" value="{{ i }}" required>
+          <label class="form-check-label" for="{{ name }}_{{ i }}">{{ i }}</label>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  {%- endmacro %}
+
+  {{ scale('compost_moist', 'Moist') }}
+  {{ scale('compost_length', 'Length') }}
+  {{ scale('compost_texture', 'Texture') }}
+  {{ scale('compost_spawn', 'Spawn') }}
+
+  <h4 class="mt-3">Casing</h4>
+  <div class="col-md-3"><label class="form-label">Relative Humidity (%) *</label><input type="number" step="0.01" name="relative_humidity" class="form-control" required></div>
+  <div class="col-md-3"><label class="form-label">Casing Water</label><input type="number" step="0.01" name="casing_water" class="form-control"></div>
+  <div class="col-md-3"><label class="form-label">Casing BBK</label><input type="number" step="0.01" name="casing_bbk" class="form-control"></div>
+  <div class="col-md-3"><label class="form-label">Casing Peat Moss 55%</label><input type="number" step="0.01" name="casing_peat_55" class="form-control"></div>
+  <div class="col-md-3"><label class="form-label">Casing Peat Moss 110%</label><input type="number" step="0.01" name="casing_peat_110" class="form-control"></div>
+  <div class="col-md-3"><label class="form-label">Casing Peat Moss 135%</label><input type="number" step="0.01" name="casing_peat_135" class="form-control"></div>
+  <div class="col-md-3"><label class="form-label">Casing Sugar Beet Lime</label><input type="number" step="0.01" name="casing_sugar_beet_lime" class="form-control"></div>
+  <div class="col-md-3"><label class="form-label">Casing Hydrated Lime</label><input type="number" step="0.01" name="casing_hydrated_lime" class="form-control"></div>
+  <div class="col-md-3"><label class="form-label">Casing Limestone CaCho</label><input type="number" step="0.01" name="casing_limestone_cacho" class="form-control"></div>
+
+  <h4 class="mt-3">Filling & Logistics</h4>
+  <div class="col-md-4"><label class="form-label">Filled</label><input name="filled" class="form-control" placeholder="Sequence (e.g., first)"></div>
+  <div class="col-md-4"><label class="form-label">Arrived</label><input name="arrived" class="form-control" placeholder="Sequence (e.g., first)"></div>
+  <div class="col-md-4"><label class="form-label">In Tunnel</label><input name="in_tunnel" class="form-control" placeholder="Which tunnel"></div>
+  <div class="col-md-4"><label class="form-label">Tunnel Number</label><input name="tunnel_number" class="form-control"></div>
+
+  <h4 class="mt-3">Spawning & Supplements</h4>
+  <div class="col-md-6">
+    <label class="form-label">Spawn type/Rate *</label>
+    <select name="spawn_type_rate" class="form-select" required>
+      <option value="" disabled selected>-- Choose --</option>
+      <option>Sylvan A15</option>
+      <option>Sylvan 28</option>
+      <option>Amycel Delta</option>
+      <option>Amycel Delta Express</option>
+      <option>Amycel Onyx</option>
+      <option>Amycel Exxcalibur</option>
+      <option>Amycel Hairloom</option>
+      <option>Lamber 927</option>
+      <option>Bavarian</option>
+      <option>Xxx</option>
+    </select>
+  </div>
+  <div class="col-md-6">
+    <label class="form-label">Supplement *</label>
+    <select name="supplement" class="form-select" required>
+      <option value="" disabled selected>-- Choose --</option>
+      <option>TBS</option>
+      <option>Pro-Gro</option>
+      <option>Champfood Eco CM (Organic)</option>
+      <option>Champfood Eco (Organic) Concentrate</option>
+      <option>MCSubstradd Organic</option>
+      <option>Pro Green</option>
+      <option>Pro Gro Green</option>
+      <option>Nutrigain</option>
+      <option>Natural Gold Organic</option>
+      <option>None</option>
+    </select>
+  </div>
+  <div class="col-md-4"><label class="form-label">Supplement Kg *</label><input type="number" step="0.01" name="supplement_kg" class="form-control" required></div>
+  <div class="col-md-3"><label class="form-label">Spawning - N (%)</label><input type="number" step="0.01" name="spawning_n" class="form-control"></div>
+  <div class="col-md-3"><label class="form-label">Spawning - Ash (%)</label><input type="number" step="0.01" name="spawning_ash" class="form-control"></div>
+  <div class="col-md-3"><label class="form-label">Spawning - Wet weight</label><input type="number" step="0.01" name="spawning_wet_weight" class="form-control"></div>
+  <div class="col-md-3"><label class="form-label">Spawning - Cellulose</label><input type="number" step="0.01" name="spawning_cellulose" class="form-control"></div>
+
+  <h4 class="mt-3">Shipping & Casing Measurements</h4>
+  <div class="col-md-3"><label class="form-label">Shipping - PH</label><input type="number" step="0.01" name="shipping_ph" class="form-control"></div>
+  <div class="col-md-3"><label class="form-label">Shipping - Days</label><input type="number" step="0.01" name="shipping_days" class="form-control"></div>
+  <div class="col-md-3"><label class="form-label">Casing - Thickness</label><input type="number" step="0.01" name="casing_thickness" class="form-control"></div>
+  <div class="col-md-3"><label class="form-label">Casing - Ph</label><input type="number" step="0.01" name="casing_ph" class="form-control"></div>
+  <div class="col-md-3"><label class="form-label">Casing - Humidity</label><input type="number" step="0.01" name="casing_humidity" class="form-control"></div>
+
+  <div class="col-12 mt-3"><label class="form-label">Notes</label><textarea name="notes" class="form-control"></textarea></div>
+  <div class="col-12"><button class="btn btn-primary mt-3">Save Form</button></div>
+</form>
+{% endblock %}

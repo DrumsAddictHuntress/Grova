@@ -1,0 +1,53 @@
+
+{% extends "base.html" %}
+{% block content %}
+<h1>Add Daily Stats</h1>
+<form method="post" action="{{ url_for('daily.create_daily') }}" class="row g-3">
+
+  <div class="col-12">
+    <label class="form-label">Select Form</label>
+    <select name="survey_id" class="form-select" required>
+      <option value="" disabled selected>-- Select a form --</option>
+      {% for s in surveys %}
+      <option value="{{ s.id }}">#{{ s.id }} — Room {{ s.room_number }} | Batch {{ s.batch_number }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="col-md-3"><label class="form-label">Date</label><input type="date" name="stat_date" class="form-control" required></div>
+
+  <h4 class="mt-3">Compost</h4>
+  <div class="col-md-3"><label class="form-label">Comp Ctrl</label><input type="number" step="0.01" name="comp_ctrl" class="form-control"></div>
+  <div class="col-md-3"><label class="form-label">Comp Temp</label><input type="number" step="0.01" name="comp_temp" class="form-control"></div>
+  <div class="col-md-3"><label class="form-label">Comp Max</label><input type="number" step="0.01" name="comp_max" class="form-control"></div>
+
+  <h4 class="mt-3">Air</h4>
+  <div class="col-md-3"><label class="form-label">Air Ctrl</label><input type="number" step="0.01" name="air_ctrl" class="form-control"></div>
+  <div class="col-md-3"><label class="form-label">Air Meas</label><input type="number" step="0.01" name="air_meas" class="form-control"></div>
+
+  <h4 class="mt-3">CO₂ & Humidity</h4>
+  <div class="col-md-3"><label class="form-label">CO₂</label><input type="number" step="0.01" name="co2" class="form-control"></div>
+  <div class="col-md-3"><label class="form-label">CO₂ Meas</label><input type="number" step="0.01" name="co2_meas" class="form-control"></div>
+  <div class="col-md-3"><label class="form-label">RH Meas</label><input type="number" step="0.01" name="rh_meas" class="form-control"></div>
+  <div class="col-md-3"><label class="form-label">Max</label><input type="number" step="0.01" name="max_val" class="form-control"></div>
+  <div class="col-md-3"><label class="form-label">Ab.</label><input type="number" step="0.01" name="ab_val" class="form-control"></div>
+
+  <h4 class="mt-3">Fresh Air</h4>
+  <div class="col-md-3"><label class="form-label">Fresh Air</label><input type="number" step="0.01" name="fresh_air" class="form-control"></div>
+  <div class="col-md-3"><label class="form-label">Fresh Air Meas</label><input type="number" step="0.01" name="fresh_air_meas" class="form-control"></div>
+
+  <h4 class="mt-3">Fan</h4>
+  <div class="col-md-3"><label class="form-label">Fan</label><input type="number" step="0.01" name="fan" class="form-control"></div>
+  <div class="col-md-3"><label class="form-label">Fan Meas</label><input type="number" step="0.01" name="fan_meas" class="form-control"></div>
+
+  <h4 class="mt-3">Climate</h4>
+  <div class="col-md-3"><label class="form-label">Heat</label><input type="number" step="0.01" name="heat" class="form-control"></div>
+  <div class="col-md-3"><label class="form-label">Temperature</label><input type="number" step="0.01" name="temp" class="form-control"></div>
+  <div class="col-md-3"><label class="form-label">Cool Temp</label><input type="number" step="0.01" name="cool_temp" class="form-control"></div>
+  <div class="col-md-3"><label class="form-label">H₂O</label><input type="number" step="0.01" name="h2o" class="form-control"></div>
+  <div class="col-md-3"><label class="form-label">Ref Temp</label><input type="number" step="0.01" name="ref_temp" class="form-control"></div>
+
+  <div class="col-12 mt-3"><label class="form-label">Remarks</label><textarea name="remarks" class="form-control"></textarea></div>
+  <div class="col-12"><button class="btn btn-primary mt-3">Save Daily Stat</button></div>
+</form>
+{% endblock %}
