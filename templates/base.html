@@ -39,5 +39,27 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Normalize all number inputs across browsers & locales
+    document.querySelectorAll('input[type="number"]').forEach((el) => {
+      el.setAttribute('inputmode', 'decimal');
+      if (!el.hasAttribute('step')) el.setAttribute('step', '0.1'); // fallback
+      el.setAttribute('lang', 'en-CA');
+
+      el.addEventListener('keydown', (e) => {
+        if ((e.key === 'ArrowUp' || e.key === 'ArrowDown') && el.value === '') {
+          el.value = '0';
+        }
+      });
+    });
+
+    // Convert commas to dots before submit
+    document.addEventListener('submit', (e) => {
+      e.target?.querySelectorAll?.('input[type="number"]').forEach((el) => {
+        if (el.value.includes(',')) el.value = el.value.replace(/,/g, '.');
+      });
+    });
+  </script>
+
 </body>
 </html>
