@@ -29,3 +29,16 @@ def health():
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
+
+@app.route("/health")
+def health():
+    return jsonify(status="ok"), 200
+
+@app.route("/")
+def home():
+    return "OK", 200
+
+# Temporary stub so Render stops 404-ing /login
+@app.route("/login")
+def login_stub():
+    return "Login coming soon", 200
