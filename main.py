@@ -1,6 +1,6 @@
 
 from config import app
-from flask import render_template, redirect, url_for
+from flask import render_template, redirect, url_for, jsonify
 from routes_surveys import bp as surveys_bp
 from routes_daily import bp as daily_bp
 
