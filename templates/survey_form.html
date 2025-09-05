@@ -122,6 +122,11 @@
   <div class="col-md-3"><label class="form-label">Casing - Humidity</label><input type="number" step="0.01" name="casing_humidity" class="form-control"></div>
 
   <div class="col-12 mt-3"><label class="form-label">Notes</label><textarea name="notes" class="form-control"></textarea></div>
-  <div class="col-12"><button class="btn btn-primary mt-3">Save Form</button></div>
+  <div class="col-12 mt-3 d-flex gap-2">
+    <button class="btn btn-primary">Save Form</button>
+    <a class="btn btn-outline-secondary" href="{{ url_for('home') }}">Cancel</a>
+  </div>
+
+  </div>
 </form>
 {% endblock %}

@@ -8,18 +8,23 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="{{ url_for('home') }}">Grova</a>
-      <div class="collapse navbar-collapse">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item"><a class="nav-link" href="{{ url_for('form_redirect') }}">Create Form</a></li>
-          <li class="nav-item"><a class="nav-link" href="{{ url_for('daily_redirect') }}">Add Daily Stats</a></li>
-          <li class="nav-item"><a class="nav-link" href="{{ url_for('report_redirect') }}">View Reports</a></li>
-        </ul>
-      </div>
+<!-- paste right after <body> -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="{{ url_for('home') }}">Grova</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div id="nav" class="collapse navbar-collapse">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('form_redirect') }}">Create Form</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('daily_redirect') }}">Add Daily Stats</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('report_redirect') }}">View Reports</a></li>
+      </ul>
     </div>
-  </nav>
+  </div>
+</nav>
+
 
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}

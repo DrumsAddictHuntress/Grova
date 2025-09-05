@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="mb-3">Reports</h1>
+
+<div class="accordion" id="surveyAccordion">
+  {% for survey in surveys %}
+  <div class="accordion-item mb-2">
+    <h2 class="accordion-header" id="heading{{ survey.id }}">
+      <button class="accordion-button collapsed" type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapse{{ survey.id }}"
+              aria-expanded="false"
+              aria-controls="collapse{{ survey.id }}">
+        Survey #{{ survey.id }} — Room {{ survey.room_number }} | Batch {{ survey.batch_number }} | {{ survey.filling_date }}
+      </button>
+    </h2>
+
+    <div id="collapse{{ survey.id }}" class="accordion-collapse collapse"
+         aria-labelledby="heading{{ survey.id }}" data-bs-parent="#surveyAccordion">
+      <div class="accordion-body">
+
+        <!-- Survey summary -->
+        <h5>Survey Details</h5>
+        <ul class="mb-2">
+          <li>Room Number: {{ survey.room_number }}</li>
+          <li>Batch Number: {{ survey.batch_number }}</li>
+          <li>Filling Date: {{ survey.filling_date }}</li>
+        </ul>
+
+        <!-- 🔹 Survey action buttons (View / Edit / Delete) -->
+        <div class="mt-2 d-flex gap-2 mb-3">
+          <a class="btn btn-sm btn-outline-primary"
+             href="{{ url_for('report_detail', survey_id=survey.id) }}">
+            View Details
+          </a>
+
+          <a class="btn btn-sm btn-outline-secondary"
+             href="{{ url_for('edit_survey', survey_id=survey.id) }}">
+            Edit
+          </a>
+
+          <form method="post"
+                action="{{ url_for('delete_survey', survey_id=survey.id) }}"
+                class="d-inline"
+                onsubmit="return confirm('Delete this survey and ALL its daily stats?')">
+            <button class="btn btn-sm btn-outline-danger">Delete</button>
+          </form>
+        </div>
+
+        <!-- Daily stats table -->
+        <h5 class="mt-3">Daily Stats</h5>
+        {% if survey.daily_stats %}
+        <div class="table-responsive">
+          <table class="table table-sm table-bordered align-middle">
+            <thead class="table-light">
+            <tr>
+              <th>Date</th>
+              <th>Comp Ctrl</th>
+              <th>Comp Temp</th>
+              <th>Comp Max</th>
+              <th>Air Ctrl</th>
+              <th>Air Meas</th>
+              <th>CO₂</th>
+              <th>CO₂ Meas</th>
+              <th>RH Meas</th>
+              <th>Max</th>
+              <th>Ab.</th>
+              <th>Fresh Air</th>
+              <th>Fresh Air Meas</th>
+              <th>Fan</th>
+              <th>Fan Meas</th>
+              <th>Heat</th>
+              <th>Temp</th>
+              <th>Cool Temp</th>
+              <th>H₂O</th>
+              <th>Ref Temp</th>
+              <th>Remarks</th>
+              <!-- 🔹 Actions column header -->
+              <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for stat in survey.daily_stats %}
+            <tr>
+              <td>{{ stat.stat_date }}</td>
+              <td>{{ stat.comp_ctrl }}</td>
+              <td>{{ stat.comp_temp }}</td>
+              <td>{{ stat.comp_max }}</td>
+              <td>{{ stat.air_ctrl }}</td>
+              <td>{{ stat.air_meas }}</td>
+              <td>{{ stat.co2 }}</td>
+              <td>{{ stat.co2_meas }}</td>
+              <td>{{ stat.rh_meas }}</td>
+              <td>{{ stat.max_val }}</td>
+              <td>{{ stat.ab_val }}</td>
+              <td>{{ stat.fresh_air }}</td>
+              <td>{{ stat.fresh_air_meas }}</td>
+              <td>{{ stat.fan }}</td>
+              <td>{{ stat.fan_meas }}</td>
+              <td>{{ stat.heat }}</td>
+              <td>{{ stat.temp }}</td>
+              <td>{{ stat.cool_temp }}</td>
+              <td>{{ stat.h2o }}</td>
+              <td>{{ stat.ref_temp }}</td>
+              <td>{{ stat.remarks }}</td>
+
+              <!-- 🔹 Daily stat action buttons (Edit / Delete) -->
+              <td class="text-nowrap">
+                <a href="{{ url_for('edit_daily', stat_id=stat.id) }}"
+                   class="btn btn-sm btn-outline-secondary">Edit</a>
+                <form method="post"
+                      action="{{ url_for('delete_daily', stat_id=stat.id) }}"
+                      class="d-inline"
+                      onsubmit="return confirm('Delete this daily stat?')">
+                  <button class="btn btn-sm btn-outline-danger">Delete</button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <p class="text-muted">No daily stats added yet.</p>
+        {% endif %}
+
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
+

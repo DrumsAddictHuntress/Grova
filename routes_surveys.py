@@ -3,6 +3,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from datetime import datetime
 from config import db
 from models import Survey, DailyStat
+from auth_utils import login_required, current_user_id
 
 bp = Blueprint("surveys", __name__, url_prefix="/surveys")
 
@@ -34,7 +35,7 @@ def new_survey():
 @bp.post("")
 def create_survey():
     try:
-        s = Survey(
+        s = Survey(user_id=current_user_id(), 
             room_number=request.form.get("room_number","").strip(),
             batch_number=request.form.get("batch_number","").strip(),
             filling_date=_date(request.form.get("filling_date")),
@@ -57,7 +58,7 @@ def create_survey():
         db.session.add(s)
         db.session.commit()
         flash("Static form saved.", "success")
-        return redirect(url_for("surveys.list_surveys"))
+        return redirect(url_for("report_redirect"))
     except Exception as e:
         db.session.rollback()
         flash(f"Failed to save static form: {e}", "danger")

@@ -3,6 +3,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from datetime import datetime
 from config import db
 from models import Survey, DailyStat
+from auth_utils import login_required, current_user_id
 
 bp = Blueprint("daily", __name__, url_prefix="/daily")
 
@@ -28,7 +29,7 @@ def create_daily():
             flash("Please choose a valid completed form.", "danger")
             return redirect(url_for("daily.new_daily"))
 
-        d = DailyStat(
+        d = DailyStat(user_id=current_user_id(), 
             survey_id=survey.id,
             stat_date=_date(request.form.get("stat_date")),
             comp_ctrl=_f(request.form.get("comp_ctrl")),
