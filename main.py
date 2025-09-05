@@ -1,5 +1,5 @@
 from config import app, db
-from flask import render_template, redirect, url_for, jsonify, flash, request
+from flask import render_template, redirect, url_for, jsonify, flash, request, session
 from routes_surveys import bp as surveys_bp
 from routes_daily import bp as daily_bp
 from auth import auth as auth_bp
@@ -14,6 +14,8 @@ app.register_blueprint(auth_bp)
 # Home
 @app.route("/")
 def home():
+    if not session.get("user_id"):
+        return redirect(url_for("auth.login"))
     return render_template("home.html")
 
 # Survey form redirect
