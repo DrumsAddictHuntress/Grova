@@ -1,9 +1,9 @@
-
 from datetime import date, datetime
 from config import db
 from werkzeug.security import generate_password_hash, check_password_hash
 
 class User(db.Model):
+    __tablename__ = "users"  # <-- add explicit table name
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150), unique=True, nullable=False)
     password_hash = db.Column(db.String(256), nullable=False)
@@ -16,10 +16,11 @@ class User(db.Model):
 
 
 class Survey(db.Model):
-    # Owner
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    __tablename__ = "surveys"
+    __tablename__ = "surveys"  # <-- keep explicit table name
     id = db.Column(db.Integer, primary_key=True)
+
+    # Owner FK (nullable=True so existing rows don’t block migration)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)
 
     room_number = db.Column(db.String(50), nullable=False)
     batch_number = db.Column(db.String(50), nullable=False)
@@ -76,14 +77,22 @@ class Survey(db.Model):
     is_completed = db.Column(db.Boolean, default=True, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    daily_stats = db.relationship("DailyStat", backref="survey", cascade="all, delete-orphan", lazy="dynamic")
+    daily_stats = db.relationship(
+        "DailyStat",
+        backref="survey",
+        cascade="all, delete-orphan",
+        lazy="dynamic"
+    )
 
 
 class DailyStat(db.Model):
-    __tablename__ = "daily_stats"
+    __tablename__ = "daily_stats"  # <-- keep explicit table name
     id = db.Column(db.Integer, primary_key=True)
 
-    survey_id = db.Column(db.Integer, db.ForeignKey("surveys.id"), nullable=False)
+    # FKs (nullable=True for smooth migration)
+    survey_id = db.Column(db.Integer, db.ForeignKey("surveys.id"), nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)
+
     stat_date = db.Column(db.Date, nullable=False, default=date.today)
 
     comp_ctrl = db.Column(db.Float)
